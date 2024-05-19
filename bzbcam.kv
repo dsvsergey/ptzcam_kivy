@@ -1,0 +1,188 @@
+<CameraList@Screen>:
+    name: "screen_cam_list"
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDToolbar:
+            id: toolbar
+            title: "Cameras"
+
+        ScrollView:
+            MDList:
+                id: cam_list
+
+        MDBottomAppBar:
+            MDToolbar:
+                icon: "camera-plus-outline"
+                type: "bottom"
+                on_action_button: app.on_button_add_cam()
+                mode: "end"
+
+
+<CameraNew@Screen>:
+    name: "camera_new"
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: "10dp"
+
+        MDToolbar:
+            id: toolbar
+            right_action_items: [["content-save-outline", lambda x: app._cam_create()]]
+            left_action_items:[["arrow-left", lambda x: app.go_cams()]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(48)
+                spacing: dp(15)
+                MDTextField:
+                    id: title
+                    hint_text: "Title"
+
+                MDTextField:
+                    id: ip_address
+                    hint_text: "IP Address"
+
+                MDTextField:
+                    id: visca_port
+                    hint_text: "VISCA Port"
+
+                MDTextField:
+                    id: rtsp_port
+                    hint_text: "RTSP Port"
+
+                MDTextField:
+                    id: user_name
+                    hint_text: "User Name"
+
+                MDTextField:
+                    id: pwr
+                    helper_text_mode: "on_focus"
+                    password: True
+                    hint_text: "Password"
+
+
+<CameraEditor@Screen>:
+    name: "camera_edit"
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: "10dp"
+
+        MDToolbar:
+            id: toolbar
+            right_action_items: [["delete-outline", lambda x: app._dlg_delete_cam(root.cam_id)], ["content-save-outline", lambda x: app._save_cam()]]
+            left_action_items:[["arrow-left", lambda x: app._go_cam_player_right()]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(48)
+                spacing: dp(15)
+                MDTextField:
+                    id: title
+                    hint_text: "Title"
+
+                MDTextField:
+                    id: ip_address
+                    hint_text: "IP Address"
+
+                MDTextField:
+                    id: visca_port
+                    hint_text: "VISCA Port"
+
+                MDTextField:
+                    id: rtsp_port
+                    hint_text: "RTSP Port"
+
+                MDTextField:
+                    id: user_name
+                    hint_text: "User Name"
+
+                MDTextField:
+                    id: pwr
+                    helper_text_mode: "on_focus"
+                    password: True
+                    hint_text: "Password"
+
+
+<Cameras@Screen>:
+    name: "cams"
+    BoxLayout:
+        MDFlatButton:
+            text: "Two"
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'cam_list'
+
+
+<CamPlayer@Screen>:
+    name: "cam_player"
+    MDBoxLayout:
+        cam_screen: img_screen
+        orientation: "vertical"
+        spacing: "10dp"
+
+        MDToolbar:
+            id: toolbar2
+            right_action_items: [["settings-outline", lambda x: app._edit_cam(app.current_cam)]]
+            left_action_items:[["arrow-left", lambda x: app.go_cams()]]
+
+        Image:
+            id: img_screen
+            on_touch_down: app.on_touch_down(args)
+            on_touch_up: app.on_touch_up(args)
+            on_touch_move: app.on_touch_move(args)
+
+        ScrollView:
+            MDGridLayout:
+                id: preset_list
+                cols: 3
+                row_default_height: (self.width - self.cols*self.spacing[0]) / self.cols
+                row_force_default: True
+                adaptive_height: True
+                padding: dp(4), dp(4)
+                spacing: dp(4)
+
+        MDBottomAppBar:
+            MDToolbar:
+                icon: "bookmark-plus-outline"
+                type: "bottom"
+                on_action_button: app._on_add_preset()
+                mode: "end"
+
+
+<PresetsNew@Screen>:
+    name: "presets_new"
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: "10dp"
+
+        MDToolbar:
+            id: toolbar
+            title: "Add New Preset"
+            right_action_items: [["content-save-outline", lambda x: app._save_preset()]]
+            left_action_items:[["arrow-left", lambda x: app._go_cam_player_right()]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(48)
+                spacing: dp(15)
+
+                Image:
+                    id: img_screenshot
+
+                MDTextField:
+                    id: title
+                    hint_text: "Title"
+
+
+ScreenManager:
+    CameraList:
+    CameraEditor:
+    CameraNew:
+    CamPlayer:
+    Cameras:
+    PresetsNew:
